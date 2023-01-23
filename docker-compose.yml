@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+
+  wp-blog:
+    image: wordpress
+    restart: always
+    depends_on: 
+      - wp-db
+    ports:
+      - 3003:80
+    networks:
+      - net-blog
+    volumes:
+      - wp-blog:/var/www/html
+      - ./wordpress/wp-content/themes/:/var/www/html/wp-content/themes/:rw
+    # environment:
+      # - WORDPRESS_DB_HOST=wp-db:3004
+      # - WORDPRESS_DB_NAME=wp-blog
+      # - WORDPRESS_DB_USER=wp-user
+      # - WORDPRESS_DB_PASSWORD=32RReZr2
+      # - WORDPRESS_TABLE_PREFIX=wp_
+
+  wp-db:
+    image: mariadb
+    restart: always
+    ports:
+      - 3004:3306
+    networks:
+      - net-blog
+    volumes:
+      - wp-db:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=1cwU408k
+      - MARIADB_DATABASE=wp-blog
+      - MARIADB_USER=wp-user
+      - MARIADB_PASSWORD=32RReZr2
+
+networks:
+  net-blog:
+    driver: bridge
+
+volumes:
+  wp-blog:
+  wp-db:
